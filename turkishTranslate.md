@@ -123,8 +123,6 @@ Re-entrancy saldırıları hakkında daha fazla bilgi için: [Reentrancy Attack 
 
 Bu saldırı bir akıllı kontratın bilinmeyen bir adrese ether göndermesi durumunda gerçekleşebilir. Saldırgan, içinde zararlı kod içeren bir [fallback function](https://solidity.readthedocs.io/en/latest/contracts.html?highlight=fallback#fallback-function) olan harici adresli akıllı kontrat oluşturabilir. Böylece, bir akıllı kontrat bu adrese ether gönderdiğinde, zararlı kodları da çağırmış olacaktır. Zararlı kodlar genellikle savunmasız akıllı kontratlarda bir fonksiyonu yürütür ve geliştiricinin beklemediği işlemleri gerçekleştirir."Yeniden giriş (re-entrancy)" adı, harici kötü niyetli bir akıllı kontratın, savunmasız kontrattaki bir fonksiyonu geri çağırması ve savunmasız kontrattaki isteğe bağlı bir konumda kodu yürütmesi "*yeniden girmesi*" (re-enters) gerçeğinden gelir.
 
-To clarify this, consider the simple vulnerable contract, which acts as an Ethereum vault that allows depositors to only withdraw 1 ether per week.
-
 Bu saldırıyı açıklığa kavuşturmak için, mevduat sahiplerinin haftada sadece 1 eter çekmesine izin veren ve Ethereum kasası görevi gören basit savunmasız bir akıllı kontart olduğunu düşünün.
 
 EtherStore.sol:
