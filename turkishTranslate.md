@@ -152,9 +152,9 @@ contract EtherStore {
  }
 ```
 
-This contract has two public functions. `depositFunds()` and `withdrawFunds()`. The `depositFunds()` function simply increments the senders balances. The `withdrawFunds()` function allows the sender to specify the amount of wei to withdraw. It will only succeed if the requested amount to withdraw is less than 1 ether and a withdrawal hasn't occurred in the last week. Or does it?...
+Bu kontrat iki public fonksiyona sahip. `depositFunds()` ve `withdrawFunds()`. `depositFunds()` fonksiyonu en basit haliyle göndericinin (msg.sender) bakiyesini (balance) arttırır. `withdrawFunds()` fonksiyonu göndericinin wei cinsinden çekmek istediği tutarı belirlemesini ve o tutarı çekmesini sağlar. Bu fonksiyona göre sadece çekilmek istenen miktar 1 eterden az veya ona eşitse ve geçen hafta para çekme işlemi gerçekleşmediyse başarılı olacaktır. Peki ya gerçekten öyle mi?...
 
-The vulnerability comes on line \[17\] where we send the user their requested amount of ether. Consider a malicious attacker creating the following contract,
+Güvenlik zafiyet, kullanıcıya istediği miktarda eteri gönderdiğimiz \[17\] satırında açığa çıkıyor. Aşağıdaki akıllı kontratı oluşturan kötü niyetli bir saldırganı düşünün,
 
 Attack.sol:
 ```solidity
