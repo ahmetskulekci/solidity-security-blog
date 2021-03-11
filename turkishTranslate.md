@@ -152,7 +152,7 @@ contract EtherStore {
 
 Bu kontrat iki public fonksiyona sahip. `depositFunds()` ve `withdrawFunds()`. `depositFunds()` fonksiyonu en basit haliyle göndericinin (msg.sender) bakiyesini (balance) arttırır. `withdrawFunds()` fonksiyonu göndericinin wei cinsinden çekmek istediği tutarı belirlemesini ve o tutarı çekmesini sağlar. Bu fonksiyona göre sadece çekilmek istenen miktar 1 etherden az ise ve geçen hafta para çekme işlemi gerçekleşmediyse başarılı olacaktır. Peki ya gerçekten öyle mi?...
 
-Güvenlik zafiyet, kullanıcıya istediği miktarda etheri gönderdiğimiz \[17\] satırda açığa çıkıyor. Aşağıdaki akıllı kontratı oluşturan kötü niyetli bir saldırganı düşünün,
+Güvenlik zafiyeti, kullanıcıya istediği miktarda etheri gönderdiğimiz \[17\] satırda açığa çıkıyor. Aşağıdaki akıllı kontratı oluşturan kötü niyetli bir saldırganı düşünün,
 
 Attack.sol:
 ```solidity
