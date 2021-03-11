@@ -123,7 +123,7 @@ Re-entrancy saldırıları hakkında daha fazla bilgi için: [Reentrancy Attack 
 
 Bu saldırı bir akıllı kontratın bilinmeyen bir adrese ether göndermesi durumunda gerçekleşebilir. Saldırgan, içinde zararlı kod içeren bir [fallback function](https://solidity.readthedocs.io/en/latest/contracts.html?highlight=fallback#fallback-function) olan harici adresli akıllı kontrat oluşturabilir. Böylece, bir akıllı kontrat bu adrese ether gönderdiğinde, zararlı kodları da çağırmış olacaktır. Zararlı kodlar genellikle savunmasız akıllı kontratlarda bir fonksiyonu yürütür ve geliştiricinin beklemediği işlemleri gerçekleştirir."Yeniden giriş (re-entrancy)" adı, harici kötü niyetli bir akıllı kontratın, savunmasız kontrattaki bir fonksiyonu geri çağırması ve savunmasız kontrattaki isteğe bağlı bir konumda kodu yürütmesi "*yeniden girmesi*" (re-enters) gerçeğinden gelir.
 
-Bu saldırıyı açıklığa kavuşturmak için, mevduat sahiplerinin haftada sadece 1 eter çekmesine izin veren ve Ethereum kasası görevi gören basit savunmasız bir akıllı kontart olduğunu düşünün.
+Bu saldırıyı açıklığa kavuşturmak için, mevduat sahiplerinin haftada sadece 1 ether çekmesine izin veren ve Ethereum kasası görevi gören basit savunmasız bir akıllı kontart olduğunu düşünün.
 
 EtherStore.sol:
 ```solidity
@@ -150,9 +150,9 @@ contract EtherStore {
  }
 ```
 
-Bu kontrat iki public fonksiyona sahip. `depositFunds()` ve `withdrawFunds()`. `depositFunds()` fonksiyonu en basit haliyle göndericinin (msg.sender) bakiyesini (balance) arttırır. `withdrawFunds()` fonksiyonu göndericinin wei cinsinden çekmek istediği tutarı belirlemesini ve o tutarı çekmesini sağlar. Bu fonksiyona göre sadece çekilmek istenen miktar 1 eterden az ise ve geçen hafta para çekme işlemi gerçekleşmediyse başarılı olacaktır. Peki ya gerçekten öyle mi?...
+Bu kontrat iki public fonksiyona sahip. `depositFunds()` ve `withdrawFunds()`. `depositFunds()` fonksiyonu en basit haliyle göndericinin (msg.sender) bakiyesini (balance) arttırır. `withdrawFunds()` fonksiyonu göndericinin wei cinsinden çekmek istediği tutarı belirlemesini ve o tutarı çekmesini sağlar. Bu fonksiyona göre sadece çekilmek istenen miktar 1 etherden az ise ve geçen hafta para çekme işlemi gerçekleşmediyse başarılı olacaktır. Peki ya gerçekten öyle mi?...
 
-Güvenlik zafiyet, kullanıcıya istediği miktarda eteri gönderdiğimiz \[17\] satırda açığa çıkıyor. Aşağıdaki akıllı kontratı oluşturan kötü niyetli bir saldırganı düşünün,
+Güvenlik zafiyet, kullanıcıya istediği miktarda etheri gönderdiğimiz \[17\] satırda açığa çıkıyor. Aşağıdaki akıllı kontratı oluşturan kötü niyetli bir saldırganı düşünün,
 
 Attack.sol:
 ```solidity
@@ -190,7 +190,7 @@ contract Attack {
 
 Bu kötü niyetli akıllı kontratın "EtherStore" akıllı kontratından nasıl yararlanabileceğini görelim. Saldırgan, yukarıdaki kontratı (diyelim ki "0x0 ... 123" adresinde) constructor parametresi olarak "EtherStore" isimli kontrat adresiyle oluşturacaktır. Bu, `etherStore` global değişkenini başlatacak ve saldırmak istenilen kontrata yönlendirecektir.
 
-Saldırgan daha sonra bir miktar eterle (1'e eşit veya daha büyük) `pwnEtherStore()` fonksiyonunu çağırır, bu örnek için "1 eter" diyelim. Bu örnekte, bir dizi başka kullanıcının bu kontrata eter yatırdığını varsayıyoruz, yani akıllı kontratın mevcut bakiyesi "10 eter" diyelim. Daha sonra aşağıdakiler gerçekleşir:
+Saldırgan daha sonra bir miktar etherle (1'e eşit veya daha büyük) `pwnEtherStore()` fonksiyonunu çağırır, bu örnek için "1 ether" diyelim. Bu örnekte, bir dizi başka kullanıcının bu kontrata ether yatırdığını varsayıyoruz, yani akıllı kontratın mevcut bakiyesi "10 ether" diyelim. Daha sonra aşağıdakiler gerçekleşir:
 
 1. **Attack.sol - Satır \[15\]** - EtherStore kontratınta `depositFunds()` fonksiyonu `1 ether` (ve çok miktarda gaz) değeri ile `msg.value` olarak çağrılacaktır. Gönderici (`msg.sender`) bizim kötü niyetli kontratımız (`0x0...123`) olacaktır. Böylece `balances[0x0..123] = 1 ether` olacaktır.
 
@@ -198,7 +198,7 @@ Saldırgan daha sonra bir miktar eterle (1'e eşit veya daha büyük) `pwnEtherS
 
 3. **EtherStore.sol - Satır \[17\]** - Kurban kontrat daha sonra kötü niyetli kontrata `1 ether` gönderecektir.
 
-4. **Attack.sol - Satır \[25\]** - Kötü niyetli kontrata gönderilen eter fallback fonksiyonunu yürütecektir.
+4. **Attack.sol - Satır \[25\]** - Kötü niyetli kontrata gönderilen ether fallback fonksiyonunu yürütecektir.
  
 5. **Attack.sol - Satır \[26\]** - EtherStore kontratının toplam bakiyesi `10 ether` idi. Çekme işlemi sonrası `9 ether` olacaktır.
  
