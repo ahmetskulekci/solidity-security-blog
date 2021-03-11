@@ -115,9 +115,9 @@ Bu alan, sürekli değişen ve gelişen bir alan olduğu için ve herkesi katkı
 
 <h2 id="reentrancy"><span id="SP-1">1. Re-Entrancy</span></h2>
 
-One of the features of Ethereum smart contracts is the ability to call and utilise code of other external contracts. Contracts also typically handle ether, and as such often send ether to various external user addresses. The operation of calling external contracts, or sending ether to an address, requires the contract to submit an external call. These external calls can be hijacked by attackers whereby they force the contract to execute further code (i.e. through a fallback function) , including calls back into itself. Thus the code execution "*re-enters*" the contract. Attacks of this kind were used in the infamous DAO hack.
+Ethereum akıllı kontratlarının özelliklerinden biri, diğer harici kontratların kodunu çağırabilme ve kullanabilme yeteneğidir. Kontratlar, ether ile işlem yapabilir ve özellikle çeşitli harici kullanıcı adreslerine (EAO) veya diğer akıllı kontratlara ether gönderebilirler. Harici smart kontratları çağırma veya bir adrese ether gönderme işlemi, akıllı kontratın harici bir çağrı göndermesini gerektirir. Bu harici çağrılar saldırganlar tarafından ele geçirilebilir ve böylece kontratın kendisini geri çağrılar da dahil olmak üzere daha fazla kod çalıştırmaya (bir fallback fonksiyonu aracılığıyla) zorlarlar. Böylece kod yürütme kontrata "yeniden girer (re-enters)". Bu saldırı daha önce Ethereum DAO hack'inde kullanıldı.
 
-For further reading on re-entrancy attacks, see [Reentrancy Attack On Smart Contracts](https://medium.com/@gus_tavo_guim/reentrancy-attack-on-smart-contracts-how-to-identify-the-exploitable-and-an-example-of-an-attack-4470a2d8dfe4) and [Consensus - Ethereum Smart Contract Best Practices](https://consensys.github.io/smart-contract-best-practices/known_attacks/#reentrancy).
+Re-entrancy attacks hakkında daha fazla bilgi için: [Reentrancy Attack On Smart Contracts](https://medium.com/@gus_tavo_guim/reentrancy-attack-on-smart-contracts-how-to-identify-the-exploitable-and-an-example-of-an-attack-4470a2d8dfe4) ve [Consensus - Ethereum Smart Contract Best Practices](https://consensys.github.io/smart-contract-best-practices/known_attacks/#reentrancy).
 
 <h3 id="re-vuln">Zafiyet</h3>
 
