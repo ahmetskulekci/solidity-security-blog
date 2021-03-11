@@ -150,9 +150,9 @@ contract EtherStore {
  }
 ```
 
-Bu kontrat iki public fonksiyona sahip. `depositFunds()` ve `withdrawFunds()`. `depositFunds()` fonksiyonu en basit haliyle göndericinin (msg.sender) bakiyesini (balance) arttırır. `withdrawFunds()` fonksiyonu göndericinin wei cinsinden çekmek istediği tutarı belirlemesini ve o tutarı çekmesini sağlar. Bu fonksiyona göre sadece çekilmek istenen miktar 1 eterden az veya ona eşitse ve geçen hafta para çekme işlemi gerçekleşmediyse başarılı olacaktır. Peki ya gerçekten öyle mi?...
+Bu kontrat iki public fonksiyona sahip. `depositFunds()` ve `withdrawFunds()`. `depositFunds()` fonksiyonu en basit haliyle göndericinin (msg.sender) bakiyesini (balance) arttırır. `withdrawFunds()` fonksiyonu göndericinin wei cinsinden çekmek istediği tutarı belirlemesini ve o tutarı çekmesini sağlar. Bu fonksiyona göre sadece çekilmek istenen miktar 1 eterden az ise ve geçen hafta para çekme işlemi gerçekleşmediyse başarılı olacaktır. Peki ya gerçekten öyle mi?...
 
-Güvenlik zafiyet, kullanıcıya istediği miktarda eteri gönderdiğimiz \[17\] satırında açığa çıkıyor. Aşağıdaki akıllı kontratı oluşturan kötü niyetli bir saldırganı düşünün,
+Güvenlik zafiyet, kullanıcıya istediği miktarda eteri gönderdiğimiz \[17\] satırda açığa çıkıyor. Aşağıdaki akıllı kontratı oluşturan kötü niyetli bir saldırganı düşünün,
 
 Attack.sol:
 ```solidity
@@ -190,31 +190,28 @@ contract Attack {
 
 Bu kötü niyetli akıllı kontratın "EtherStore" akıllı kontratından nasıl yararlanabileceğini görelim. Saldırgan, yukarıdaki kontratı (diyelim ki "0x0 ... 123" adresinde) constructor parametresi olarak "EtherStore" isimli kontrat adresiyle oluşturacaktır. Bu, `etherStore` global değişkenini başlatacak ve saldırmak istenilen kontrata yönlendirecektir.
 
-The following would then occur:
-
 Saldırgan daha sonra bir miktar eterle (1'e eşit veya daha büyük) `pwnEtherStore()` fonksiyonunu çağırır, bu örnek için "1 eter" diyelim. Bu örnekte, bir dizi başka kullanıcının bu kontrata eter yatırdığını varsayıyoruz, yani akıllı kontratın mevcut bakiyesi "10 eter" diyelim. Daha sonra aşağıdakiler gerçekleşir:
 
+1. **Attack.sol - Satır \[15\]** - EtherStore kontratınta `depositFunds()` fonksiyonu `1 ether` (ve çok miktarda gaz) değeri ile `msg.value` olarak çağrılacaktır. Gönderici (`msg.sender`) bizim kötü niyetli kontratımız (`0x0...123`) olacaktır. Böylece `balances[0x0..123] = 1 ether` olacaktır.
 
-1. **Attack.sol - Satır \[15\]** - The `depositFunds()` function of the EtherStore contract will be called with a `msg.value` of `1 ether` (and a lot of gas). The sender (`msg.sender`) will be our malicious contract (`0x0...123`). Thus, `balances[0x0..123] = 1 ether`.
+2. **Attack.sol - Satır \[17\]** - Kötü niyetli kontrat daha sonra `EtherStore` kontratının `withdrawFunds()` fonksiyonunu `1 ether` parametresiyle çağırır. Daha önce herhangi bir para çekme işlemi yapmadığımız için fonksiyondaki tüm require koşulları (`EtherStore` kontratının \[12\]-\[16\] satırları) sağlanmış olacaktır.
 
-2. **Attack.sol - Satır \[17\]** - The malicious contract will then call the `withdrawFunds()` function of the `EtherStore` contract with a parameter of `1 ether`. This will pass all the requirements (Lines \[12\]-\[16\] of the `EtherStore` contract) as we have made no previous withdrawals.
+3. **EtherStore.sol - Satır \[17\]** - Kurban kontrat daha sonra kötü niyetli kontrata `1 ether` gönderecektir.
 
-3. **EtherStore.sol - Satır \[17\]** - The contract will then send `1 ether` back to the malicious contract.
+4. **Attack.sol - Satır \[25\]** - Kötü niyetli kontrata gönderilen eter fallback fonksiyonunu yürütecektir.
+ 
+5. **Attack.sol - Satır \[26\]** - EtherStore kontratının toplam bakiyesi `10 ether` idi. Çekme işlemi sonrası `9 ether` olacaktır.
+ 
+6. **Attack.sol - Satır \[27\]** - Fallback fonksiyonu daha sonra `EtherStore` `withdrawFunds()` fonksiyonunu tekrar çağırır ve `EtherStore` kontratına yeniden girer ("*re-enters*").
 
-4. **Attack.sol - Satır \[25\]** - The ether sent to the malicious contract will then execute the fallback function.
+7. **EtherStore.sol - Satır \[11\]** - Bu ikinci `withdrawFunds()` çağrısında, \[18\] satırı henüz yürütülmediği için bakiyemiz hala `1 ether`dir. Dolayısıyla, hala `balances[0x0..123] = 1 ether` bu ifadeye sahibiz. Aynı durum `lastWithdrawTime` değişkeni için de geçerlidir. Sonuç olarak yine, tüm require koşulları sağlanmış durumdadır.
 
-5. **Attack.sol - Satır \[26\]** - The total balance of the EtherStore contract was `10 ether` and is now `9 ether` so this if statement passes.
+8. **EtherStore.sol - Satır \[17\]** - Başka bir `1 ether` daha çekiyoruz.
 
-6. **Attack.sol - Satır \[27\]** - The fallback function then calls the `EtherStore` `withdrawFunds()` function again and "*re-enters*" the `EtherStore` contract.
+9. **4-8 adımları tekrarlanır** -  `Attack.sol` içindeki \[26\] satırı tarafından dikte edildiği gibi `EtherStore.balance >= 1` olduğu sürece işlem tekrarlanmaya devam eder.
 
-7. **EtherStore.sol - Satır \[11\]** - In this second call to `withdrawFunds()`, our balance is still `1 ether` as line \[18\] has not yet been executed. Thus, we still have `balances[0x0..123] = 1 ether`. This is also the case for the `lastWithdrawTime` variable. Again, we pass all the requirements.
-
-8. **EtherStore.sol - Satır \[17\]** - We withdraw another `1 ether`.
-
-9. **4-8 adımları tekrarlanır** -  until `EtherStore.balance >= 1` as dictated by line \[26\] in `Attack.sol`.
-
-10. **Attack.sol - Satır \[26\]** - Once there less 1 (or less) ether left in the `EtherStore` contract, this if statement will fail. This will then allow lines \[18\] and \[19\] of the `EtherStore` contract to be executed (for each call to the `withdrawFunds()` function).
-
+10. **Attack.sol - Satır \[26\]** - `EtherStore` kontratında 1 (veya daha az) ether kaldığında, bu if ifadesi başarısız olacaktır. Bu, daha sonra `EtherStore` kontratının \[18\] ve \[19\] satırlarının yürütülmesine izin verecektir. (`withdrawFunds()` işlevine yapılan her bir çağrı için).
+// Burada kaldım.
 11. **EtherStore.sol - Satır \[18\] ve \[19\]** - The `balances` and `lastWithdrawTime` mappings will be set and the execution will end.
 
 The final result, is that the attacker has withdrawn all (bar 1) ether from the `EtherStore` contract, instantaneously with a single transaction.
