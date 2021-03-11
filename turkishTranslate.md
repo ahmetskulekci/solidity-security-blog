@@ -211,20 +211,22 @@ Saldırgan daha sonra bir miktar etherle (1'e eşit veya daha büyük) `pwnEther
 9. **4-8 adımları tekrarlanır** -  `Attack.sol` içindeki \[26\] satırı tarafından dikte edildiği gibi `EtherStore.balance >= 1` olduğu sürece işlem tekrarlanmaya devam eder.
 
 10. **Attack.sol - Satır \[26\]** - `EtherStore` kontratında 1 (veya daha az) ether kaldığında, bu if ifadesi başarısız olacaktır. Bu, daha sonra `EtherStore` kontratının \[18\] ve \[19\] satırlarının yürütülmesine izin verecektir. (`withdrawFunds()` işlevine yapılan her bir çağrı için).
-// Burada kaldım.
-11. **EtherStore.sol - Satır \[18\] ve \[19\]** - The `balances` and `lastWithdrawTime` mappings will be set and the execution will end.
 
-The final result, is that the attacker has withdrawn all (bar 1) ether from the `EtherStore` contract, instantaneously with a single transaction.
+11. **EtherStore.sol - Satır \[18\] ve \[19\]** - `balances` ve `lastWithdrawTime` mapping eşlemeleri tamamlanacak ve yürütme sona erecektir.
+
+Nihai sonuç, saldırganın tek bir işlemle anında `EtherStore` kontratındaki tüm (bar 1) etherleri (kendine ait olmayanlar da dahil olmak üzere) çekmesidir.
 
 <h3 id="re-prevention">Önleyici Teknikler</h3>
 
-There are a number of common techniques which help avoid potential re-entrancy vulnerabilities in smart contracts. The first is to ( whenever possible) use the built-in [transfer()](http://solidity.readthedocs.io/en/latest/units-and-global-variables.html#address-related) function when sending ether to external contracts. The transfer function only sends `2300 gas` with the external call, which isn't enough for the destination address/contract to call another contract (i.e. re-enter the sending contract).
+Akıllı kontratlarda potansiyel `re-entrancy` zafiyetlerinden kaçınmaya yardımcı olan bir dizi yaygın teknik vardır. Bunlardan ilki (mümkün olduğunda) harici kontratlara ether gönderirken yerleşik (built-in) [transfer()](http://solidity.readthedocs.io/en/latest/units-and-global-variables.html#address-related) fonksiyonunu kullanmaktır. `Transfer` fonksiyonu, harici çağrıyla yalnızca `2300 gas` gönderir; bu gas miktarı, hedef adresin/kontratın başka bir kontratı çağırması için yeterli değildir. (yani kontrata bu gas miktarı ile `re-enter` yapılamaz)
 
-The second technique is to ensure that all logic that changes state variables happen before ether is sent out of the contract (or any external call). In the `EtherStore` example, lines \[18\] and \[19\] of `EtherStore.sol` should be put before line \[17\]. It is good practice to place any code that performs external calls to unknown addresses as the last operation in a localised function or piece of code execution. This is known as the [checks-effects-interactions](http://solidity.readthedocs.io/en/latest/security-considerations.html#use-the-checks-effects-interactions-pattern) pattern.
+İkinci teknik, durum değişkenlerinin (state variables), kontrata ether gönderilmeden önce belirlenmesini sağlamaktır. (veya herhangi bir harici çağrı için) `EtherStore` örneğinde, `EtherStore.sol`un \[18\] ve \[19\] satırları \[17\] satırından önce kullanılmalıdır. Bilinmeyen adreslere harici çağrı yapan herhangi bir kodu globalleştirilmiş bir fonksiyonun veya kod yürütme parçasının son işlemi olarak yerleştirmek iyi bir uygulamadır. Bu uygulama şekli [checks-effects-interactions](http://solidity.readthedocs.io/en/latest/security-considerations.html#use-the-checks-effects-interactions-pattern) pattern olarak bilinmektedir.
 
-A third technique is to introduce a mutex. That is, to add a state variable which locks the contract during code execution, preventing reentrancy calls.
+Üçüncü teknik ise bir mutex tanıtmaktır. Yani, kod yürütme sırasında kontratı kilitleyen ve `re-entry` çağrılarını engelleyen bir durum değişkeni eklemek.
 
-Applying all of these techniques (all three are unnecessary, but is done for demonstrative purposes) to `EtherStore.sol`, gives the re-entrancy-free contract:
+Tüm bu tekniklerin `EtherStore.sol`a uygulanması, `re-entry` saldırılarından korunmayı sağlar:
+(Üç önleyici tekniğin de aynı anda birlikte uygulanmak zorunda değildir, ancak gösterme amacıyla aşağıdaki kodda hepsi uygulanmıştır)
+
 ```solidity
 contract EtherStore {
 
@@ -258,7 +260,7 @@ contract EtherStore {
 
 <h3 id="re-example">Gerçek Vaka Örneği: The DAO</h3>
 
-[The DAO](https://en.wikipedia.org/wiki/The_DAO_(organization)) (Decentralized Autonomous Organization) was one of the major hacks that occurred in the early development of Ethereum. At the time, the contract held over $150 million USD. Re-entrancy played a major role in the attack which ultimately lead to the hard-fork that created Ethereum Classic (ETC). For a good analysis of the DAO exploit, see [Phil Daian's post](http://hackingdistributed.com/2016/06/18/analysis-of-the-dao-exploit/).
+[The DAO](https://en.wikipedia.org/wiki/The_DAO_(organization)) (Decentralized Autonomous Organization), Ethereum'un erken gelişimin zamanlarında meydana gelen en büyük hack'lerden biriydi. O zamanlar kontrat, 150 milyon doların üzerinde bir bakiye tutuyordu. Re-entrancy, saldırıda büyük bir rol oynadı ve sonuçta Ethereum Classic'i (ETC) oluşturan hard fork'a yol açtı. DAO istismarının iyi bir analizi için bkz. [Phil Daian's post](http://hackingdistributed.com/2016/06/18/analysis-of-the-dao-exploit/).
 
 <h2 id="ouflow"><span id="SP-2">2. Arithmetic Over/Under Flows</span></h2>
 
