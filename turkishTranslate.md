@@ -264,17 +264,21 @@ contract EtherStore {
 
 <h2 id="ouflow"><span id="SP-2">2. Arithmetic Over/Under Flows</span></h2>
 
-If care is not taken, variables in Solidity can be exploited if user input is unchecked and calculations are performed which result in numbers that lie outside the range of the data type that stores them.
-
 Ethereum Sanal Makinesi (EVM - Ethereum Virtual Machine) tamsayılar (integers) için sabit boyutlu (fixed-size) veri türlerini belirtir. Bu, bir tamsayı değişkenin yalnızca temsil edebileceği belirli bir sayı aralığına sahip olduğu anlamına gelir. Örneğin bir `uint8` değişkeni, yalnızca \[0,255\] aralığındaki sayıları saklayabilir. `256` sayısını bir `uint8` değişkeninde tutmaya çalışırsak sonuç `0` olacaktır. Bir kullanıcı girdisi kontrolden geçirilmiyorsa ve ilgili girdi depolayabileceği sayı aralığı dışında bir sayıyı girdi olarak alırsa ve buna göre hesaplamalar yapılırsa, Solidity'deki bu tarz değişkenler sömürülebilir demektir.
 
-Arithmetic over/under flows hakkında daha fazla bilgi için bkz. [How to Secure Your Smart Contracts](https://medium.com/loom-network/how-to-secure-your-smart-contracts-6-solidity-vulnerabilities-and-how-to-avoid-them-part-1-c33048d4d17d), [Ethereum Smart Contract Best Practices](https://consensys.github.io/smart-contract-best-practices/known_attacks/#integer-overflow-and-underflow) and [Ethereum, Solidity and integer overflows: programming blockchains like 1970](https://randomoracle.wordpress.com/2018/04/27/ethereum-solidity-and-integer-overflows-programming-blockchains-like-1970/)
+Arithmetic over/under flows hakkında daha fazla bilgi için bkz. [How to Secure Your Smart Contracts](https://medium.com/loom-network/how-to-secure-your-smart-contracts-6-solidity-vulnerabilities-and-how-to-avoid-them-part-1-c33048d4d17d), [Ethereum Smart Contract Best Practices](https://consensys.github.io/smart-contract-best-practices/known_attacks/#integer-overflow-and-underflow) ve [Ethereum, Solidity and integer overflows: programming blockchains like 1970](https://randomoracle.wordpress.com/2018/04/27/ethereum-solidity-and-integer-overflows-programming-blockchains-like-1970/)
 
 <h3 id="ou-vuln">Zafiyet</h3>
 
-An over/under flow occurs when an operation is performed that requires a fixed size variable to store a number (or piece of data) that is outside the range of the variable's data type.
+Değişkenin veri türünün aralığının dışında olan bir sayıyı (veya veri parçasını) depolamak için sabit boyutlu bir değişken gerektiren bir işlem gerçekleştirildiğinde over/under flow (akışı) oluşur.
 
-For example, subtracting `1` from a `uint8` (unsigned integer of 8 bits, i.e. only positive) variable that stores `0` as it's value, will result in the number `255`. This is an underflow. We have assigned a number below the range of the `uint8`, the result *wraps around* and gives the largest number a `uint8` can store. Similarly, adding `2^8=256` to a `uint8` will leave the variable unchanged as we have wrapped around the entire length of the `uint` (for the mathematicians, this is similar to adding $2\pi$ to the angle of a trigonometric function, $\sin(x) = \sin(x+2\pi)$). Adding numbers larger than the data type's range is called an overflow. For clarity, adding `257` to a `uint8` that currently has a zero value will result in the number `1`. It's sometimes instructive to think of fixed type variables being cyclic, where we start again from zero  if we add numbers above the largest possible stored number, and vice-versa for zero (where we start counting down from the largest number the more we subtract from 0).
+It's sometimes instructive to think of fixed type variables being cyclic, where we start again from zero  if we add numbers above the largest possible stored number, and vice-versa for zero (where we start counting down from the largest number the more we subtract from 0).
+
+Örneğin, `0` değer olarak saklayan bir `uint8` (8 bitlik işaretsiz tamsayı, yani yalnızca pozitif değerler) değişkeninden `1` değerini çıkarmak `255` sayısıyla sonuçlanacaktır. Bu bir alttan taşmadır (under flow). `uint8` değişkeninin alabileceği sayı aralığının altında bir sayı atadık, sonuç *değişkenin etrafını sarar* ve bir `uint8` değişkeninin saklayabileceği en büyük sayıyı verir. Benzer bir şekilde bir `uint8` değişkenine `2^8=256` değerini eklediğimizde, `uint8` değişkeninin alabileceği tüm değerlerin uzunluğunu çevrelediğimiz için bu durum değişkenin değiştirilmeden bırakılması ile sonuçlanacaktır (Matematikçiler için bu durum $\sin(x) = \sin(x+2\pi)$'a $2\pi$ eklemeye benzer). Bir değişkenin veri türünün alabileceği değer aralığından daha büyük sayılar ile o değişkenin değerini toplamaya taşma (overflow) adı verilir. Anlaşılır olması için, şu anda sıfır değerine sahip bir `uint8` türündeki bir değişkene `257` değerinin eklenmesi `1` sayısıyla sonuçlanacaktır. Sabit tip değişkenlerin döngüsel olduğunu düşünmek öğreticidir. Burada mümkün olan en büyük depolanmış sayının üstüne sayılar eklersek sıfırdan başlarız veya tam tersi senaryoyu çıkarma işlemi için en düşük değer olarak düşünebilirsiniz.
+
+
+
+
 
 These kinds of numerical caveats allow attackers to misuse code and create unexpected logic flows. For example, consider the time locking contract below.
 
