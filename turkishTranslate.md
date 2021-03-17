@@ -264,9 +264,11 @@ contract EtherStore {
 
 <h2 id="ouflow"><span id="SP-2">2. Arithmetic Over/Under Flows</span></h2>
 
-The Ethereum Virtual Machine (EVM) specifies fixed-size data types for integers. This means that an integer variable, only has a certain range of numbers it can represent. A `uint8` for example, can only store numbers in the range \[0,255\]. Trying to store `256` into a `uint8` will result in `0`. If care is not taken, variables in Solidity can be exploited if user input is unchecked and calculations are performed which result in numbers that lie outside the range of the data type that stores them.
+If care is not taken, variables in Solidity can be exploited if user input is unchecked and calculations are performed which result in numbers that lie outside the range of the data type that stores them.
 
-For further reading on arithmetic over/under flows, see [How to Secure Your Smart Contracts](https://medium.com/loom-network/how-to-secure-your-smart-contracts-6-solidity-vulnerabilities-and-how-to-avoid-them-part-1-c33048d4d17d), [Ethereum Smart Contract Best Practices](https://consensys.github.io/smart-contract-best-practices/known_attacks/#integer-overflow-and-underflow) and [Ethereum, Solidity and integer overflows: programming blockchains like 1970](https://randomoracle.wordpress.com/2018/04/27/ethereum-solidity-and-integer-overflows-programming-blockchains-like-1970/)
+Ethereum Sanal Makinesi (EVM - Ethereum Virtual Machine) tamsayılar (integers) için sabit boyutlu (fixed-size) veri türlerini belirtir. Bu, bir tamsayı değişkenin yalnızca temsil edebileceği belirli bir sayı aralığına sahip olduğu anlamına gelir. Örneğin bir `uint8` değişkeni, yalnızca \[0,255\] aralığındaki sayıları saklayabilir. `256` sayısını bir `uint8` değişkeninde tutmaya çalışırsak sonuç `0` olacaktır. Bir kullanıcı girdisi kontrolden geçirilmiyorsa ve ilgili girdi depolayabileceği sayı aralığı dışında bir sayıyı girdi olarak alırsa ve buna göre hesaplamalar yapılırsa, Solidity'deki bu tarz değişkenler sömürülebilir demektir.
+
+Arithmetic over/under flows hakkında daha fazla bilgi için bkz. [How to Secure Your Smart Contracts](https://medium.com/loom-network/how-to-secure-your-smart-contracts-6-solidity-vulnerabilities-and-how-to-avoid-them-part-1-c33048d4d17d), [Ethereum Smart Contract Best Practices](https://consensys.github.io/smart-contract-best-practices/known_attacks/#integer-overflow-and-underflow) and [Ethereum, Solidity and integer overflows: programming blockchains like 1970](https://randomoracle.wordpress.com/2018/04/27/ethereum-solidity-and-integer-overflows-programming-blockchains-like-1970/)
 
 <h3 id="ou-vuln">Zafiyet</h3>
 
