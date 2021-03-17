@@ -270,17 +270,11 @@ Arithmetic over/under flows hakkında daha fazla bilgi için bkz. [How to Secure
 
 <h3 id="ou-vuln">Zafiyet</h3>
 
-Değişkenin veri türünün aralığının dışında olan bir sayıyı (veya veri parçasını) depolamak için sabit boyutlu bir değişken gerektiren bir işlem gerçekleştirildiğinde over/under flow (akışı) oluşur.
+Değişkenin veri türü aralığının dışında olan bir sayıyı (veya veri parçasını) depolamak için sabit boyutlu bir değişken gerektiren bir işlem gerçekleştirildiğinde over/under flow (akışı) oluşur.
 
-It's sometimes instructive to think of fixed type variables being cyclic, where we start again from zero  if we add numbers above the largest possible stored number, and vice-versa for zero (where we start counting down from the largest number the more we subtract from 0).
+Örneğin, `0` sayısını değer olarak saklayan bir `uint8` (8 bitlik işaretsiz tamsayı, yani yalnızca pozitif değerler) değişkeninden `1` değerini çıkarmak `255` sayısıyla sonuçlanacaktır. Bu bir alttan taşmadır (under flow). `uint8` değişkeninin alabileceği sayı aralığının altında bir sayı atadık, sonuç *değişkenin etrafını sarar* ve bir `uint8` değişkeninin saklayabileceği en büyük sayıyı verir. Benzer bir şekilde bir `uint8` değişkenine `2^8=256` değerini eklediğimizde, `uint8` değişkeninin alabileceği tüm değerlerin uzunluğunu çevrelediğimiz için bu durum değişkenin değiştirilmeden bırakılması ile sonuçlanacaktır (Matematikçiler için bu durum $\sin(x) = \sin(x+2\pi)$'a $2\pi$ eklemeye benzer). Bir değişkenin veri türünün alabileceği değer aralığından daha büyük sayılar ile o değişkenin değerini toplamaya taşma (overflow) adı verilir. Anlaşılır olması için, şu anda sıfır değerine sahip bir `uint8` türündeki bir değişkene `257` değerinin eklenmesi `1` sayısıyla sonuçlanacaktır. Sabit tip değişkenlerin döngüsel olduğunu düşünmek öğreticidir. Burada mümkün olan en büyük depolanmış sayının üstüne sayılar eklersek sıfırdan başlarız veya tam tersi senaryoyu çıkarma işlemi için en düşük değer olarak düşünebilirsiniz.
 
-Örneğin, `0` değer olarak saklayan bir `uint8` (8 bitlik işaretsiz tamsayı, yani yalnızca pozitif değerler) değişkeninden `1` değerini çıkarmak `255` sayısıyla sonuçlanacaktır. Bu bir alttan taşmadır (under flow). `uint8` değişkeninin alabileceği sayı aralığının altında bir sayı atadık, sonuç *değişkenin etrafını sarar* ve bir `uint8` değişkeninin saklayabileceği en büyük sayıyı verir. Benzer bir şekilde bir `uint8` değişkenine `2^8=256` değerini eklediğimizde, `uint8` değişkeninin alabileceği tüm değerlerin uzunluğunu çevrelediğimiz için bu durum değişkenin değiştirilmeden bırakılması ile sonuçlanacaktır (Matematikçiler için bu durum $\sin(x) = \sin(x+2\pi)$'a $2\pi$ eklemeye benzer). Bir değişkenin veri türünün alabileceği değer aralığından daha büyük sayılar ile o değişkenin değerini toplamaya taşma (overflow) adı verilir. Anlaşılır olması için, şu anda sıfır değerine sahip bir `uint8` türündeki bir değişkene `257` değerinin eklenmesi `1` sayısıyla sonuçlanacaktır. Sabit tip değişkenlerin döngüsel olduğunu düşünmek öğreticidir. Burada mümkün olan en büyük depolanmış sayının üstüne sayılar eklersek sıfırdan başlarız veya tam tersi senaryoyu çıkarma işlemi için en düşük değer olarak düşünebilirsiniz.
-
-
-
-
-
-These kinds of numerical caveats allow attackers to misuse code and create unexpected logic flows. For example, consider the time locking contract below.
+Bu tür sayısal uyarılar, saldırganların kodu kötüye kullanmasına ve beklenmedik mantık akışları oluşturmasına izin verir. Örneğin, aşağıdaki zaman kilitleme işlemi yapan bir kontratı düşünün.
 
 TimeLock.sol:
 ```solidity
