@@ -337,9 +337,9 @@ contract Token {
 }
 ```
 
-This is a simple token contract which employs a `transfer()` function, allowing participants to move their tokens around. Can you see the error in this contract?
+Burada katılımcıların tokenlerini hareket ettirmelerine olanak tanıyan, içerisinde `transfer()` isimli fonksiyon kullanan basit bir kontrat görüyoruz. Bu kontrattaki hatayı görebiliyor musunuz?
 
-The flaw comes in the `transfer()` function. The require statement on line \[13\] can be bypassed using an underflow. Consider a user that has no balance. They could call the `transfer()` function with any non-zero `_value` and pass the require statement on line \[13\]. This is because `balances[msg.sender]` is zero (and a `uint256`) so subtracting any positive amount (excluding `2^256`) will result in a positive number due to the underflow we described above. This is also true for line \[14\], where our balance will be credited with a positive number. Thus, in this example, we have achieved free tokens due to an underflow vulnerability.
+Buradaki zafiyet `transfer()` fonksiyonunun içinden geliyor. \[13\] satırındaki required ifadesi bir underflow kullanılarak atlatılabilir. Bakiyesi olmayan bir kullanıcı düşünün. Saldırganlar sıfır olmayan herhangi bir `_value` ile `transfer()` fonksiyonu çağırabilir ve required ifadesini \[13\] satırına iletebilirler. Bunun nedeni `balances[msg.sender]` sıfır (ve bir `uint256`) olduğundan, herhangi bir pozitif miktarı çıkarmak (`2^256` hariç), yukarıda tanımladığımız zafiyet nedeniyle pozitif bir sayı ile sonuçlanacaktır. Bu aynı zamanda, bakiyemizin pozitif bir sayıyla alacaklandırılacağı \[14\] satırı için de geçerlidir. Bu örnekte, bir underflow zafiyet nedeniyle bedava tokenler elde ettik.
 
 <h3 id="ou-prevention">Önleyici Teknikler</h3>
 
