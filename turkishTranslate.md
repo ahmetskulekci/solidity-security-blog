@@ -343,11 +343,11 @@ Buradaki zafiyet `transfer()` fonksiyonunun içinden geliyor. \[13\] satırında
 
 <h3 id="ou-prevention">Önleyici Teknikler</h3>
 
-The (currently) conventional technique to guard against under/overflow vulnerabilities is to use or build mathematical libraries which replace the standard math operators; addition, subtraction and multiplication (division is excluded as it doesn't cause over/under flows and the EVM reverts on division by 0).
+Underflow ve overflow zafiyetlerine karşı korunmak için (şu anda) geleneksel teknik, standart matematik operatörlerinin yerini alan matematiksel kütüphaneleri kullanmak veya oluşturmaktır; toplama, çıkarma ve çarpma (Underflow ve overflow akışlara neden olmadığından ve EVM 0'a bölmeye geri döndüğünden bölme işlemi buna dahil değildir).
 
-[OppenZepplin](https://github.com/OpenZeppelin/zeppelin-solidity) have done a great job in building and auditing secure libraries which can be leveraged by the Ethereum community. In particular, their [Safe Math Library](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/math/SafeMath.sol) is a reference or library to use to avoid under/over flow vulnerabilities.
+[OppenZepplin](https://github.com/OpenZeppelin/zeppelin-solidity), Ethereum topluluğu tarafından kullanılabilecek güvenli kütüphaneler oluşturma ve denetleme konusunda harika bir iş çıkardı. Özellikle, [Safe Math Library](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/math/SafeMath.sol) kütüphanesi, Underflow ve overflow zafiyetlerinden kaçınmak için kullanılacak bir referans veya kütüphanedir.
 
-To demonstrate how these libraries are used in Solidity, let us correct the `TimeLock` contract, using Open Zepplin's `SafeMath` library. The over flow-free contract would become:
+Bu kütüphanelerin Solidity'de nasıl kullanıldığını göstermek için Open Zepplin'in "SafeMath" kütüphanesini kullanarak "TimeLock" kontratını düzeltelim. Zafiyetten etlilenmeyecek olan kontrat şu hale gelecektir:
 
 ```solidity
 library SafeMath {
@@ -404,7 +404,7 @@ contract TimeLock {
 }
 ```
 
-Notice that all standard math operations have been replaced by the those defined in the `SafeMath` library. The `TimeLock` contract no longer performs any operation which is capable of doing an under/over flow.
+Tüm standart matematik işlemlerinin, `SafeMath` kütüphanesindeki tanımlananlarla değiştirildiğine dikkat edin. Bu sayede `TimeLock` kontratı artık bu tipteki ataklar için sömürülebilir durumda değildir.
 
 <h3 id="ou-example">Gerçek Vaka Örneği: PoWHC and Batch Transfer Overflow (<a href="https://nvd.nist.gov/vuln/detail/CVE-2018-10299">CVE-2018–10299</a>)</h3>
 
