@@ -422,16 +422,7 @@ Daha detaylı bilgi için bkz. [How to Secure Your Smart Contracts: 6](https://m
 
 A common defensive programming technique that is useful in enforcing correct state transitions or validating operations is *invariant-checking*. This technique involves defining a set of invariants (metrics or parameters that should not change) and checking these invariants remain unchanged after a single (or many) operation(s). This is typically good design, provided the invariants being checked are in fact invariants. One example of an invariant is the `totalSupply` of a fixed issuance [ERC20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md) token. As no functions should modify this invariant, one could add a check to the `transfer()` function that ensures the `totalSupply` remains unmodified to ensure the function is working as expected.
 
-In particular, there is one apparent *invariant*, that may be tempting to use
-but can in fact be manipulated by external users (regardless of the rules put
-in place in the smart contract) .This is the current ether stored in the
-contract. Often when developers first learn Solidity they have the
-misconception that a contract can only accept or obtain ether via payable
-functions. This misconception can lead to  contracts that have false
-assumptions about the ether balance within them which can lead to a range of
-vulnerabilities. The smoking gun for this vulnerability is the (incorrect) use
-of `this.balance`. As we will see, incorrect uses of `this.balance` can lead to
-serious vulnerabilities of this type.
+In particular, there is one apparent *invariant*, that may be tempting to use but can in fact be manipulated by external users (regardless of the rules put in place in the smart contract) .This is the current ether stored in the contract. Often when developers first learn Solidity they have the misconception that a contract can only accept or obtain ether via payable functions. This misconception can lead to  contracts that have false assumptions about the ether balance within them which can lead to a range of vulnerabilities. The smoking gun for this vulnerability is the (incorrect) use of `this.balance`. As we will see, incorrect uses of `this.balance` can lead to serious vulnerabilities of this type.
 
 There are two ways in which ether can (forcibly) be sent to a contract without using a `payable` function or executing any code on the contract. These are listed below.
 
