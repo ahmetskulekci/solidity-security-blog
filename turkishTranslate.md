@@ -579,10 +579,10 @@ contract FibonacciLib {
     }
 }
 ```
-This library provides a function which can generate the *n*-th Fibonacci number in the sequence. It allows users to change the starting number of the sequence (`start`) and calculate the *n*-th Fibonacci-like numbers in this new sequence.
 
-Let's now consider a contract that utilises this library.
+Bu kütüphane, dizide *n*-nci Fibonacci sayısını oluşturabilen bir fonksiyon sağlar. Kullanıcıların dizinin başlangıç numarasını değiştirmelerine (`start`) ve bu yeni dizide *n*-nci Fibonacci sayılarını hesaplamalarına olanak tanır.
 
+Şimdi bu kitaplığı kullanan bir kontratı düşünelim.
 
 `FibonacciBalance.sol`:
 ```solidity
