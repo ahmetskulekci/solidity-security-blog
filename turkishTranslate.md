@@ -414,9 +414,9 @@ Bazı geliştiriciler ayrıca bazı [ERC20](https://github.com/ethereum/EIPs/blo
 
 <h2 id="ether"><span id="SP-3">3. Unexpected Ether</span></h2>
 
-Typically when ether is sent to a contract, it must execute either the fallback function, or another function described in the contract. There are two exceptions to this, where ether can exist in a contract without having executed any code. Contracts which rely on code execution for every ether sent to the contract can be vulnerable to attacks where ether is forcibly sent to a contract.
+Normalde bir kontrata ether gönderildiğinde, ya fallback fonksiyonunu ya da kontratta belirlenmiş başka bir fonksiyonu yürütmelidir. Etherin herhangi bir kod çalıştırmadan bir kontratta var olabileceği iki istisna durumu vardır. Kontrata gönderilen her ether için kod çalıştırmaya dayanan kontratlar, Ether'in zorla bir kontrata gönderildiği saldırılara karşı savunmasız olabilir.
 
-For further reading on this, see [How to Secure Your Smart Contracts: 6](https://medium.com/loom-network/how-to-secure-your-smart-contracts-6-solidity-vulnerabilities-and-how-to-avoid-them-part-2-730db0aa4834) and [ Solidity security patterns - forcing ether to a contract ](http://danielszego.blogspot.com.au/2018/03/solidity-security-patterns-forcing.html).
+Daha detaylı bilgi için bkz. [How to Secure Your Smart Contracts: 6](https://medium.com/loom-network/how-to-secure-your-smart-contracts-6-solidity-vulnerabilities-and-how-to-avoid-them-part-2-730db0aa4834) ve [ Solidity security patterns - forcing ether to a contract ](http://danielszego.blogspot.com.au/2018/03/solidity-security-patterns-forcing.html).
 
 <h3 id="ether-vuln">Zafiyet</h3>
 
