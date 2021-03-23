@@ -546,15 +546,15 @@ I'm yet to find an example of this that has been exploited in the wild. However,
 
 `CALL` ve `DELEGATECALL` opcode'ları, Ethereum geliştiricilerinin kodlarını modüler hale getirmesine yardım etmesinde çok kullanışlıdır. Kontratlara yapılan standart harici mesaj çağrıları, kodun harici kontrat/fonksiyon bağlamında çalıştırıldığı `CALL` opcode'u tarafından ele alınır. `DELEGATECALL` opcode'u, hedeflenen adreste yürütülen kodun `msg.sender` ve `msg.value` değişmeden kalmasıyla birlikte çağıran kontratın bağlamında çalıştırılması dışında standart mesaj çağrısıyla aynıdır. Bu özellik, geliştiricilerin gelecekteki kontratlar için yeniden kullanılabilir kod oluşturabileceği *kütüphanelerin* uygulanmasını sağlar.
 
-Although the differences between these two opcodes are simple and intuitive, the use of `DELEGATECALL` can lead to unexpected code execution.
+Bu iki opcode arasındaki farklar basit ve sezgisel olsa da, `DELEGATECALL` kullanımı beklenmedik kod yürütülmesine neden olabilir.
 
-For further reading, see [Ethereum Stack Exchange Question](https://ethereum.stackexchange.com/questions/3667/difference-between-call-callcode-and-delegatecall), [Solidity Docs](http://solidity.readthedocs.io/en/latest/introduction-to-smart-contracts.html#delegatecall-callcode-and-libraries) and [How to Secure Your Smart Contracts: 6](https://medium.com/loom-network/how-to-secure-your-smart-contracts-6-solidity-vulnerabilities-and-how-to-avoid-them-part-1-c33048d4d17d).
+Daha fazla bilgi için bkz. [Ethereum Stack Exchange Question](https://ethereum.stackexchange.com/questions/3667/difference-between-call-callcode-and-delegatecall), [Solidity Docs](http://solidity.readthedocs.io/en/latest/introduction-to-smart-contracts.html#delegatecall-callcode-and-libraries) ve [How to Secure Your Smart Contracts: 6](https://medium.com/loom-network/how-to-secure-your-smart-contracts-6-solidity-vulnerabilities-and-how-to-avoid-them-part-1-c33048d4d17d).
 
 <h3 id="dc-vuln">Zafiyet</h3>
 
-The context preserving nature of `DELEGATECALL` has proved that building vulnerability-free custom libraries is not as easy as one might think. The code in libraries themselves can be secure and vulnerability-free however when run in the context of another application new vulnerabilities can arise. Let's see a fairly complex example of this, using Fibonacci numbers.
+`DELEGATECALL`un doğasını koruyan bağlamı, güvenlik zafiyeti içermeyen özel kütüphaneler oluşturmanın düşünüldüğü kadar kolay olmadığını kanıtladı. Kütüphanelerdeki kodlar güvenli olup, güvenlik açığı içermeyebilir, ancak başka bir uygulama bağlamında çalıştırıldığında yeni güvenlik açıkları ortaya çıkabilir. Hadi şimdi Fibonacci sayılarını kullanarak bunun oldukça karmaşık bir örneğini görelim.
 
-Consider the following library which can generate the Fibonacci sequence and sequences of similar form.
+Fibonacci dizisini ve benzer formdaki dizileri oluşturabilen aşağıdaki kütüphaneyi düşünün.
 `FibonacciLib.sol`[^1]
 ```solidity
 // library contract - calculates fibonacci-like numbers;
