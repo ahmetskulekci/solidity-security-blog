@@ -544,7 +544,7 @@ I'm yet to find an example of this that has been exploited in the wild. However,
 
 <h2 id="delegatecall"><span id="SP-4">4. Delegatecall</span></h2>
 
-The `CALL` and `DELEGATECALL` opcodes are useful in allowing Ethereum developers to modularise their code. Standard external message calls to contracts are handled by the `CALL` opcode whereby code is run in the context of the external contract/function. The `DELEGATECALL` opcode is identical to the standard message call, except that the code executed at the targeted address is run in the context of the calling contract along with the fact that `msg.sender` and `msg.value` remain unchanged. This feature enables the implementation of *libraries* whereby developers can create reusable code for future contracts.
+`CALL` ve `DELEGATECALL` opcode'ları, Ethereum geliştiricilerinin kodlarını modüler hale getirmesine yardım etmesinde çok kullanışlıdır. Kontratlara yapılan standart harici mesaj çağrıları, kodun harici kontrat/fonksiyon bağlamında çalıştırıldığı `CALL` opcode'u tarafından ele alınır. `DELEGATECALL` opcode'u, hedeflenen adreste yürütülen kodun `msg.sender` ve `msg.value` değişmeden kalmasıyla birlikte çağıran kontratın bağlamında çalıştırılması dışında standart mesaj çağrısıyla aynıdır. Bu özellik, geliştiricilerin gelecekteki kontratlar için yeniden kullanılabilir kod oluşturabileceği *kütüphanelerin* uygulanmasını sağlar.
 
 Although the differences between these two opcodes are simple and intuitive, the use of `DELEGATECALL` can lead to unexpected code execution.
 
