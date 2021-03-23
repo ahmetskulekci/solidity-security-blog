@@ -582,7 +582,7 @@ contract FibonacciLib {
 
 Bu kütüphane, dizide *n*-nci Fibonacci sayısını oluşturabilen bir fonksiyon sağlar. Kullanıcıların dizinin başlangıç numarasını değiştirmelerine (`start`) ve bu yeni dizide *n*-nci Fibonacci sayılarını hesaplamalarına olanak tanır.
 
-Şimdi bu kitaplığı kullanan bir kontratı düşünelim.
+Şimdi bu kütüphaneyi kullanan bir kontratı düşünelim.
 
 `FibonacciBalance.sol`:
 ```solidity
@@ -617,9 +617,12 @@ contract FibonacciBalance {
 }
 
 ```
-This contract allows a participant to withdraw ether from the contract, with the amount of ether being equal to the Fibonacci number corresponding to the participants withdrawal order; i.e., the first participant gets 1 ether, the second also gets 1, the third gets 2, the forth gets 3, the fifth 5 and so on (until the balance of the contract is less than the Fibonacci number being withdrawn).
 
-There are a number of elements in this contract that may require some explanation. Firstly, there is an interesting-looking variable, `fibSig`. This holds the first 4 bytes of the Keccak (SHA-3) hash of the string "setFibonacci(uint256)". This is known as the [function selector](https://solidity.readthedocs.io/en/latest/abi-spec.html#function-selector) and is put into `calldata` to specify which function of a smart contract will be called. It is used in the `delegatecall` function on line \[21\] to specify that we wish to run the `setFibonacci(uint256)` function. The second argument in `delegatecall` is the parameter we are passing to the function. Secondly, we assume that the address for the `FibonacciLib` library is correctly referenced in the constructor (section [External Contract Referencing](#contract-reference) discuss some potential vulnerabilities relating to this kind of contract reference initialisation).
+Bu kontrat, bir katılımcının, katılımcıların çekme emrine karşılık gelen Fibonacci sayısına eşit olan ether miktarı ile kontrattan etheri çekmelerine izin verir; yani, ilk katılımcı 1 ether alır, ikincisi de 1 alır, üçüncüsü 2 alır, dördüncü 3, beşinci 5 alır ve bu böyle devam eder (kontrat bakiyesi çekilen Fibonacci sayısından az olana kadar).
+
+Firstly, there is an interesting-looking variable, `fibSig`. This holds the first 4 bytes of the Keccak (SHA-3) hash of the string "setFibonacci(uint256)". This is known as the [function selector](https://solidity.readthedocs.io/en/latest/abi-spec.html#function-selector) and is put into `calldata` to specify which function of a smart contract will be called. It is used in the `delegatecall` function on line \[21\] to specify that we wish to run the `setFibonacci(uint256)` function. The second argument in `delegatecall` is the parameter we are passing to the function. Secondly, we assume that the address for the `FibonacciLib` library is correctly referenced in the constructor (section [External Contract Referencing](#contract-reference) discuss some potential vulnerabilities relating to this kind of contract reference initialisation).
+
+Bu kontratta bazı açıklamalar gerektirebilecek bir dizi unsur vardır. BURASI YUKARIDAKİ PARAGRAFIN DEVAMI BURADAN DEVAM EDİLECEK
 
 Can you spot any error(s) in this contract? If you put this into remix, fill it with ether and call `withdraw()`, it will likely revert.
 
