@@ -99,7 +99,7 @@ Bu alan, sürekli değişen ve gelişen bir alan olduğu için ve herkesi katkı
 * [One Time Addresses](#one-time-addresses)
 * [Single Transaction Airdrops](#single-transaction-airdrops)
 
-## [Kripto ile ilişkili ilginç hack vakaları ve hatalar](#hacks)
+## [Kripto ile ilgili Hack Vakaları ve hatalar](#hacks)
 
 
 ## Referanslar / Okunması Önerilen Yazılar
